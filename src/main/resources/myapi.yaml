@@ -1,0 +1,79 @@
+openapi: 3.0.3
+info:
+  title: My Product API
+  description: API to work with product
+  version: v1
+servers:
+  - url: 'http://localhost:8080/v1'
+paths:
+  /products:
+    post:
+      summary: Creates a new product.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Created
+    get:
+      summary: Returns a list of products.
+      description: Optional extended description in CommonMark or HTML
+      responses:
+        '200':
+          description: A JSON array of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/{productId}:
+    get:
+      summary: Returns a product by ID.
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Parameter description in CommonMark or HTML.
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: A product object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+        '400':
+          description: The specified product ID is invalid (not a number).
+        '404':
+          description: A product with the specified ID was not found.
+        default:
+          description: Unexpected error
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 4
+        name:
+          type: string
+          example: Potato
+        cost:
+          type: number
+          example: 5.5
+      required:
+        - id
+        - name
+        - cost
+
+
