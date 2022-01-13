@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  description: API to work with product
+  title: My Product API
+  version: v1
+servers:
+- url: http://localhost:8080/v1
+paths:
+  /products:
+    get:
+      description: Optional extended description in CommonMark or HTML
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Product'
+                type: array
+          description: A JSON array of products
+      summary: Returns a list of products.
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        "201":
+          description: Created
+      summary: Creates a new product.
+      x-contentType: application/json
+      x-accepts: application/json
+  /products/{productId}:
+    get:
+      parameters:
+      - description: Parameter description in CommonMark or HTML.
+        explode: false
+        in: path
+        name: productId
+        required: true
+        schema:
+          format: int64
+          minimum: 1
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: A product object.
+        "400":
+          description: The specified product ID is invalid (not a number).
+        "404":
+          description: A product with the specified ID was not found.
+        default:
+          description: Unexpected error
+      summary: Returns a product by ID.
+      x-accepts: application/json
+components:
+  schemas:
+    Product:
+      example:
+        cost: 5.5
+        name: Potato
+        id: 4
+      properties:
+        id:
+          example: 4
+          format: int64
+          type: integer
+        name:
+          example: Potato
+          type: string
+        cost:
+          example: 5.5
+          type: number
+      required:
+      - cost
+      - id
+      - name
+      type: object
+
